@@ -1,0 +1,9 @@
+.DS_Store
+.idea/
+.python-version
+.classpath
+.project
+.settings
+
+output/
+target/
