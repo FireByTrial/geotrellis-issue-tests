@@ -1,6 +1,7 @@
 package com.geotrellis.reproject
 
 import org.scalatest._
+import matchers.should._
 import geotrellis.proj4.CRS
 import geotrellis.raster.{CellSize, RasterExtent}
 import geotrellis.raster.io.geotiff.MultibandGeoTiff
@@ -9,8 +10,9 @@ import geotrellis.raster.io.geotiff.writer.GeoTiffWriter
 import geotrellis.raster.reproject.Reproject.Options
 import geotrellis.raster.resample.{Bilinear, NearestNeighbor}
 import geotrellis.raster.testkit.RasterMatchers
+import org.scalatest.flatspec.AnyFlatSpec
 
-class ReprojectCalculator extends FunSuite
+class ReprojectCalculator extends AnyFlatSpec with Matchers
   with BeforeAndAfterAll
   with RasterMatchers
 {
@@ -24,7 +26,7 @@ class ReprojectCalculator extends FunSuite
 
   lazy val sourceTiff = read("/img/generic-source/5b_checkerboard.tif")
 
-  test("resample should equal expected bounds and extent") {
+  it should "resample should equal expected bounds and extent" in {
     val source_extent = sourceTiff.extent
     val targetRasterExtent = RasterExtent(source_extent, targetCellSize)
     // the following assertions are likely redundant but probably still not a bad idea to check
@@ -37,7 +39,7 @@ class ReprojectCalculator extends FunSuite
     resampled.rasterExtent shouldBe targetRasterExtent
 
     val reprojected = resampled.reproject(sourceCrs, targetCrs, Options(method = Bilinear))
-    GeoTiffWriter.write(MultibandGeoTiff(reprojected, targetCrs), path="/tmp/reproject_test_output_GT341.tif")
+    //GeoTiffWriter.write(MultibandGeoTiff(reprojected, targetCrs), path="/tmp/reproject_test_output_GT350.tif")
     reprojected.rasterExtent.cols shouldBe 271
     reprojected.rasterExtent.rows shouldBe 122
     reprojected.rasterExtent.cellwidth shouldBe 3.149631228464766E-5 +- 0.0000001
